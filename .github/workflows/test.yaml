@@ -1,0 +1,26 @@
+name: Render and test cookiecutter
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  cookiecutter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4 
+        with:
+          python-version: '3.11' 
+          cache: 'pip'
+
+      - run: |
+          apt-get update && apt-get install -y tree
+          pip install -r requirements.txt
+
+      - run: |
+          cookiecutter -v . --no-input
+          gen_dir=$(jq -r .module_name cookiecutter.json )
+          tree ${gen_dir}
+          for file in $(find ${gen_dir} -type f); do printf "\n\n$file\n\n"; cat $file; done
