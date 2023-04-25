@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  cookiecutter:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -13,11 +13,14 @@ jobs:
       - uses: actions/setup-python@v4 
         with:
           python-version: '3.11' 
-          cache: 'pip' # caching pip dependencies
-      - run: pip install cookiecutter==2.1.1
+          cache: 'pip'
 
       - run: |
-          cookiecutter . --no-input
+          apt-get update && apt-get install -y tree
+          pip install -r requirements.txt
+
+      - run: |
+          cookiecutter -v . --no-input
           gen_dir=$(jq -r .module_name cookiecutter.json )
           tree ${gen_dir}
           for file in $(find ${gen_dir} -type f); do printf "\n\n$file\n\n"; cat $file; done
