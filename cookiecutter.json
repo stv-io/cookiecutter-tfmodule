@@ -1,0 +1,6 @@
+{
+    "module_name": "terraform-google-something-awesome",
+    "short_description": "Something awesome is being built",
+    "terraform_required_version": "1.4.5",
+    "google_providers_version": "4.63.0"
+}
